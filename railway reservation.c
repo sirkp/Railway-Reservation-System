@@ -1,9 +1,8 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
-#include <stdbool.h> 
 #include<malloc.h>
-#define CAPACITY 5
+#define CAPACITY 5//defines maximum no of confirm tickets
 
 typedef struct Nodes//ticket
 {
@@ -86,9 +85,9 @@ int reserve(Node *head)//reserves ticket returns 1 if confirmed else 0
 	}
 }
 
-bool pop(int pnr)// remove a element from list
+int pop(int pnr)// remove a element from list
 {
-	bool success=false;
+	int success=0;
 	Node* itr = head;
 	Node* prevNode=NULL;
 	while(itr!=NULL&&itr->pnr!=pnr)
@@ -106,7 +105,7 @@ bool pop(int pnr)// remove a element from list
 			prevNode->next = itr->next;
 			free(itr);
 		}	
-		success = true;
+		success = 1;
 	}
 	return success;	
 }
@@ -130,7 +129,11 @@ Node* deque(int pnr)// remove a element from queue
 			rear = NULL;	
 		}
 		else
-		prevNode->next = itr->next;
+		{
+			prevNode->next = itr->next;
+			if(itr==rear)
+			rear = prevNode;	
+		}
 		
 		return itr;	
 	}
@@ -143,7 +146,7 @@ Node* getFront(){return front;}// returns front of queue
 
 void cancel(int pnr)//cancel ticket
 {
-	bool success = pop(pnr);
+	int success = pop(pnr);
 	if(success)//confirmed ticket to be cancelled
 	{
 		count_linkedList--;
@@ -221,7 +224,7 @@ int main()
 	{	
 		case 1 :  status=reserve(head);
 	              if(status==0)
-	                printf("\n Booking Full!! \nYou are added to waiting list.Your PNR is %d and Waiting list number is %d \n",num,count_queue);
+	                printf("\n Booking Full!! \n You are added to waiting list.Your PNR is %d and Waiting list number is %d \n",num,count_queue);
 	              else
 	                printf(" \nBooking Successful!!! Enjoy your journey! Your PNR is %d\n\n", num);
 	              break;
